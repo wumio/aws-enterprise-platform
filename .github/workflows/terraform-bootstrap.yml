@@ -37,6 +37,9 @@ jobs:
         working-directory: bootstrap
         run: terraform validate
 
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v5
+
       - name: TFLint
         working-directory: bootstrap
         run: |
