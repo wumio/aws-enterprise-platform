@@ -123,3 +123,5 @@ resource "aws_s3_bucket_lifecycle_configuration" "terraform_state" {
     }
   }
 }
+
+# CI pipeline validation test
