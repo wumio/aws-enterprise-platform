@@ -1,0 +1,17 @@
+# Default
+* text=auto
+
+# Terraform files
+*.tf text eol=lf
+*.tfvars text eol=lf
+*.hcl text eol=lf
+
+# YAML files
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Markdown documentation
+*.md text eol=lf
+
+# Shell scripts
+*.sh text eol=lf

@@ -1,0 +1,33 @@
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+#Variable files
+*.tfvars
+*.tfvars.json
+*.auto.tfvars
+
+# Sensitive files
+*.pem
+*.key
+
+# CLI
+.terraformrc
+terraform.rc
+
+# IDE
+.vscode/
+.idea/
+
+#macOS
+.DS_Store
+
+# Windows
+Thumbs.db
