@@ -18,8 +18,8 @@ Production-inspired AWS infrastructure platform built with Terraform.
 - ✅ Bootstrap infrastructure
 - ✅ Remote state management
 - ✅ Backend hardening
-- 🚧 CI/CD pipeline
-- ⏳ Networking stack
+- ✅ CI/CD pipeline
+- ✅ Networking stack
 - ⏳ Identity stack
 - ⏳ Compute stack
 
