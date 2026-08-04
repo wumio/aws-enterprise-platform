@@ -40,7 +40,6 @@ pre-commit run --all-files
 ```
 
 The repository uses pre-commit to automatically:
-
 - Format Terraform code
 - Validate Terraform configuration
 - Run TFLint
