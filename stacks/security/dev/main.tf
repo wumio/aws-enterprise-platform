@@ -19,7 +19,8 @@ module "security_groups" {
 module "flow_logs" {
   source = "../../../modules/security/flow-logs"
 
-  name        = var.name
-  environment = var.environment
-  vpc_id      = data.terraform_remote_state.networking.outputs.vpc_id
+  name              = var.name
+  environment       = var.environment
+  retention_in_days = 365
+  vpc_id            = data.terraform_remote_state.networking.outputs.vpc_id
 }

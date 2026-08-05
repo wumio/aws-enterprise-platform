@@ -12,3 +12,9 @@ variable "vpc_id" {
   description = "VPC ID where flow logs will be enabled"
   type        = string
 }
+
+variable "retention_in_days" {
+  description = "Number of days to retain VPC flow logs in CloudWatch Logs"
+  type        = number
+  default     = 365
+}
