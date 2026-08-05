@@ -1,10 +1,12 @@
-name: Terraform Bootstrap Validation
+name: Terraform Validation
 
 on:
   pull_request:
     paths:
-      - "bootstrap/**"
-      - ".github/workflows/terraform-bootstrap.yml"
+      - "**/*.tf"
+      - "**/*.tfvars"
+      - "**/*.hcl"
+      - ".github/workflows/terraform-validation.yml"
 
   workflow_dispatch:
 
@@ -16,6 +18,17 @@ jobs:
     name: Terraform Validation
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        directory:
+          - bootstrap
+          - modules/networking
+          - modules/security/flow-logs
+          - modules/security/security-groups
+          - stacks/networking/dev
+          - stacks/security/dev
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,27 +39,36 @@ jobs:
           terraform_version: "1.15.8"
 
       - name: Terraform Init
-        working-directory: bootstrap
+        working-directory: ${{ matrix.directory }}
         run: terraform init -backend=false
 
       - name: Terraform Format Check
-        working-directory: bootstrap
+        working-directory: ${{ matrix.directory }}
         run: terraform fmt -check -recursive
 
       - name: Terraform Validate
-        working-directory: bootstrap
+        working-directory: ${{ matrix.directory }}
         run: terraform validate
 
       - name: Setup TFLint
         uses: terraform-linters/setup-tflint@v5
 
       - name: TFLint
-        working-directory: bootstrap
+        working-directory: ${{ matrix.directory }}
         run: |
           tflint --init
           tflint
 
+  checkov:
+    name: Checkov Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Checkov Security Scan
         uses: bridgecrewio/checkov-action@v12
         with:
-          directory: bootstrap
+          directory: .
+          framework: terraform
