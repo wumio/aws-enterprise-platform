@@ -8,7 +8,7 @@ resource "aws_subnet" "public" {
 
   availability_zone = var.availability_zones[count.index]
 
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = false
 
   tags = merge(
     local.common_tags,

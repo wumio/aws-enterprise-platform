@@ -1,4 +1,5 @@
 # Elastic IP
+#checkov:skip=CKV2_AWS_19:EIP is intentionally attached to the NAT Gateway rather than an EC2 instance to provide internet egress for private subnets.
 resource "aws_eip" "nat" {
   domain = "vpc"
 

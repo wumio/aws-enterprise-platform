@@ -76,7 +76,8 @@ resource "aws_dynamodb_table" "terraform_lock" {
 
 }
 
-# Create S3 bucket
+# Create S3 bucket for Terraform state
+#checkov:skip=CKV_AWS_144:Cross-region replication is intentionally deferred; the current development bootstrap architecture is single-region, with DR addressed separately in the platform DR strategy.
 resource "aws_s3_bucket" "terraform_state" {
   bucket = "${var.company_name}-${var.environment}-s3-tfstate"
 }
@@ -165,6 +166,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "terraform_state" {
 }
 
 # New bucket - Create S3 bucket to collect access logs
+#checkov:skip=CKV_AWS_144:Cross-region replication is intentionally deferred for the development access-log bucket; multi-region DR is outside the current bootstrap scope.
 resource "aws_s3_bucket" "access_logs" {
   bucket = "${var.company_name}-${var.environment}-s3-access-logs"
 
