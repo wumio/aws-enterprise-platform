@@ -12,3 +12,18 @@ output "flow_log_group_name" {
   description = "Cloudwatch Log Group containing VPC Flow Logs"
   value       = module.flow_logs.log_group_name
 }
+
+output "alb_security_group_id" {
+  description = "Security group ID for the application load balancer"
+  value       = module.security_groups.alb_security_group_id
+}
+
+output "application_security_group_id" {
+  description = "Security group ID for application workloads"
+  value       = module.security_groups.application_security_group_id
+}
+
+output "database_security_group_id" {
+  description = "Security group ID for database workloads"
+  value       = module.security_groups.database_security_group_id
+}
