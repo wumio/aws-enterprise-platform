@@ -17,3 +17,10 @@ data "terraform_remote_state" "security" {
     region = var.aws_region
   }
 }
+
+module "ec2_instance_role" {
+  source = "../../../modules/iam/ec2-instance-role"
+
+  name        = var.name
+  environment = var.environment
+}
