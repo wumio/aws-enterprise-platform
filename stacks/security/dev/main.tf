@@ -24,3 +24,16 @@ module "flow_logs" {
   retention_in_days = 365
   vpc_id            = data.terraform_remote_state.networking.outputs.vpc_id
 }
+
+module "ssm_endpoints" {
+  source = "../../../modules/security/ssm-endpoints"
+
+  name        = var.name
+  environment = var.environment
+
+  vpc_id = data.terraform_remote_state.networking.outputs.vpc_id
+
+  private_subnet_cidrs = data.terraform_remote_state.networking.outputs.private_app_subnet_cidrs
+
+  subnet_ids = data.terraform_remote_state.networking.outputs.private_app_subnet_ids
+}
