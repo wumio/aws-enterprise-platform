@@ -217,3 +217,14 @@ Bootstrap
 Each layer is independently managed and consumes only the outputs required from upstream layers.
 
 This provides a foundation for progressively adding production-oriented capabilities such as load balancing, application workloads, databases, monitoring, backup, disaster recovery, and automated deployment pipelines.
+
+***
+
+## Project Notes
+### Production-inspired reference implementation
+This project is a production-inspired reference implementation designed to demonstrate practical AWS infrastructure engineering, Infrastructure as Code, security, networking, automation, and operational practices.
+
+It is not intended to represent an AWS-certified architecture or a production-ready deployment. Infrastructure decisions are intentionally documented through architecture documentation and Architecture Decision Records (ADRs), with security controls and implementation trade-offs made explicit.
+
+### AI-assisted development
+This project was developed with AI-assisted tooling, including ChatGPT, used for architectural discussion, research, troubleshooting, documentation refinement, and code review. All infrastructure decisions, implementations, testing, and final changes were reviewed and validated by the project author.
