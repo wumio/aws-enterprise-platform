@@ -37,3 +37,23 @@ output "ec2_role_arn" {
   description = "EC2 IAM role ARN"
   value       = module.ec2_instance_role.role_arn
 }
+
+output "private_ec2_instance_id" {
+  description = "Private EC2 instance ID"
+  value       = module.private_ec2.instance_id
+}
+
+output "private_ec2_instance_arn" {
+  description = "Private EC2 instance ARN"
+  value       = module.private_ec2.instance_arn
+}
+
+output "private_ec2_private_ip" {
+  description = "Private IP address of the EC2 instance"
+  value       = module.private_ec2.private_ip
+}
+
+output "private_ec2_instance_name" {
+  description = "Private EC2 instance name"
+  value       = module.private_ec2.instance_name
+}

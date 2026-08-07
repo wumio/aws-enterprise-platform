@@ -24,3 +24,13 @@ module "ec2_instance_role" {
   name        = var.name
   environment = var.environment
 }
+
+module "private_ec2" {
+  source = "../../../modules/compute/private-ec2"
+
+  name                  = var.name
+  environment           = var.environment
+  subnet_id             = data.terraform_remote_state.networking.outputs.private_app_subnet_ids[0]
+  security_group_id     = data.terraform_remote_state.security.outputs.application_security_group_id
+  instance_profile_name = module.ec2_instance_role.instance_profile_name
+}
