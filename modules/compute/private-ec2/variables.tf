@@ -40,3 +40,9 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "user_data" {
+  description = "Optional user data script used to bootstrap the EC2 workload"
+  type        = string
+  default     = null
+}

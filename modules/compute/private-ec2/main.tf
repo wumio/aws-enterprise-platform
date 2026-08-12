@@ -9,6 +9,12 @@ resource "aws_instance" "this" {
   vpc_security_group_ids      = [var.security_group_id]
   iam_instance_profile        = var.instance_profile_name
   associate_public_ip_address = false
+  user_data                   = var.user_data
+  user_data_replace_on_change = true
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   monitoring = true
 
