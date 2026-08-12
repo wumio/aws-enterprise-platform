@@ -194,3 +194,8 @@ The application ingress pattern can be extended to support:
 * WAF integration
 
 The private-by-default workload principle established by ADR-009 remains the baseline.
+
+## Security Controls and Deferred Hardening
+Checkov identifies several controls that are not implemented in this milestone, including HTTPS/TLS termination, HTTP-to-HTTPS redirection, WAF protection, ALB access logging, deletion protection, and HTTP header hardening.
+
+These controls are intentionally deferred to subsequent application security and observability milestones. The current implementation uses HTTP intentionally to validate the initial ALB-to-private-workload ingress path.
