@@ -23,6 +23,8 @@ Production-inspired AWS infrastructure platform built with Terraform.
 * ✅ EC2 workload identity
 * ✅ Private EC2 compute foundation
 * ✅ Private Systems Manager connectivity
+* ✅ EC2 observability foundation
+* ✅ Centralized Nginx logging
 
 ## Local Development
 
@@ -118,16 +120,18 @@ This separates infrastructure concerns while allowing controlled dependencies be
 ## Reusable Modules
 The platform uses reusable Terraform modules for major infrastructure capabilities:
 
-```text
 modules/
 ├── networking/
 ├── security/
 │   ├── security-groups/
 │   ├── flow-logs/
 │   └── ssm-endpoints/
-└── iam/
-    └── ec2-instance-role/
-```
+├── iam/
+│   └── ec2-instance-role/
+├── compute/
+│   └── private-ec2/
+└── observability/
+    └── cloudwatch-agent/
 
 ## Identity Architecture
 Terraform infrastructure changes are performed through the dedicated:
@@ -172,6 +176,39 @@ The endpoints are deployed into the private application subnet tier, allowing th
 
 The workload has been validated through Systems Manager with the instance reporting an `Online` ping status.
 
+## Observability Foundation
+The compute foundation includes centralized application logging through the Amazon CloudWatch Agent.
+
+The private EC2 workload:
+* Installs the Amazon CloudWatch Agent during instance bootstrap
+* Collects Nginx access logs
+* Collects Nginx error logs
+* Sends collected logs to a dedicated CloudWatch Log Group
+* Uses configurable CloudWatch Logs retention
+* Runs without requiring a public IP address or inbound SSH access
+
+The logging path is:
+
+```text
+Private EC2
+    │
+    ├── Nginx access.log
+    │
+    └── Nginx error.log
+             │
+             ▼
+    Amazon CloudWatch Agent
+             │
+             ▼
+    CloudWatch Logs
+    /aws/ec2/nhs-dev/nginx
+
+The EC2 workload identity includes the permissions required by the CloudWatch Agent, while the log group is managed separately through Terraform.
+
+The implementation has been runtime-validated through AWS Systems Manager. The CloudWatch Agent was confirmed active, Nginx was confirmed active, and both access and error log streams were observed in CloudWatch Logs.
+
+This provides a foundation for progressively adding production-oriented capabilities such as load balancing, application workloads, databases, expanded monitoring, backup, disaster recovery, and automated deployment pipelines.
+
 ## Current Foundation
 The current development environment provides:
 * AWS VPC and subnet architecture with public and private subnet tiers
@@ -187,6 +224,9 @@ The current development environment provides:
 * Dedicated Terraform execution role
 * Local Terraform validation, formatting, and TFLint checks through pre-commit
 * CI-based Terraform validation
+* Centralized Nginx access and error logging through CloudWatch Logs
+* Configurable CloudWatch Logs retention
+* CloudWatch Agent-based EC2 log collection
 
 ## Infrastructure Management Model
 The platform follows a layered infrastructure model:
@@ -211,7 +251,12 @@ Bootstrap
              │
              ├── EC2 IAM Role
              ├── Instance Profile
-             └── Private EC2 Workload
+             ├── Private EC2 Workload
+             └── CloudWatch Agent
+                    │
+                    ▼
+              CloudWatch Logs
+
 ```
 
 Each layer is independently managed and consumes only the outputs required from upstream layers.
