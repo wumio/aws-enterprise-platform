@@ -46,3 +46,8 @@ variable "user_data" {
   type        = string
   default     = null
 }
+
+variable "ami" {
+  description = "AMI ID used to launch the EC2 instance"
+  type        = string
+}
