@@ -163,3 +163,8 @@ Future extensions may include:
 * Additional workload log sources
 
 These capabilities are outside the scope of the current observability foundation.
+
+## Security scanning notes
+Checkov identifies several controls that are intentionally deferred in the development/reference environment, including ALB access logging, HTTPS termination, WAF protection, deletion protection, customer-managed KMS encryption for CloudWatch Logs, extended log retention, and S3 cross-region replication.
+
+These controls are considered production hardening items rather than blockers for the current infrastructure milestone. Some findings are also policy/context mismatches, such as security-group attachment and NAT EIP checks.
