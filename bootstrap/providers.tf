@@ -5,4 +5,13 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  alias  = "dr"
+  region = var.dr_aws_region
+
+  default_tags {
+    tags = local.common_tags
+  }
+}
+
 data "aws_caller_identity" "current" {}
