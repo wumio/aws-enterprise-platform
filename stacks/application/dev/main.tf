@@ -39,3 +39,14 @@ module "alb" {
   security_group_id  = data.terraform_remote_state.security.outputs.alb_security_group_id
   target_instance_id = data.terraform_remote_state.compute.outputs.private_ec2_instance_id
 }
+
+module "observability_alarms" {
+  source = "../../../modules/observability/alarms"
+
+  name        = var.name
+  environment = var.environment
+
+  load_balancer_arn_suffix = module.alb.load_balancer_arn_suffix
+  target_group_arn_suffix  = module.alb.target_group_arn_suffix
+  instance_id              = data.terraform_remote_state.compute.outputs.private_ec2_instance_id
+}
