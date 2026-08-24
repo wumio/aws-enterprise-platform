@@ -110,6 +110,24 @@ Each EC2 instance receives separate streams using the instance ID:
 
 This provides workload-level separation while allowing logs to be queried centrally through CloudWatch Logs.
 
+## Alerting
+
+The observability foundation includes CloudWatch alarms for key workload and application health conditions.
+
+The initial alert set includes:
+
+* ALB unhealthy targets
+* ALB target-side HTTP 5xx responses
+* EC2 instance status check failures
+
+Each alarm publishes notifications to a dedicated SNS topic:
+
+nhs-dev-observability-alerts
+
+The SNS topic currently has no notification subscriptions. Notification delivery is intentionally outside the scope of this milestone. Future work may add email, incident-management, or other notification integrations.
+
+The ALB alarms use `treat_missing_data = "notBreaching"` so that the absence of metric datapoints does not itself generate an alert in the development/reference environment.
+
 ## IAM
 
 The EC2 workload role includes:

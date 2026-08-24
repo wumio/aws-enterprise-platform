@@ -22,3 +22,13 @@ output "listener_arn" {
   description = "Application Load Balancer HTTP listener ARN"
   value       = aws_lb_listener.http.arn
 }
+
+output "load_balancer_arn_suffix" {
+  description = "ARN suffix of the Application Load Balancer"
+  value       = aws_lb.this.arn_suffix
+}
+
+output "target_group_arn_suffix" {
+  description = "ARN suffix of the Application Load Balancer target group"
+  value       = aws_lb_target_group.this.arn_suffix
+}
