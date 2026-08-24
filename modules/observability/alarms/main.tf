@@ -1,5 +1,6 @@
 resource "aws_sns_topic" "alerts" {
-  name = "${local.name_prefix}-observability-alerts"
+  name              = "${local.name_prefix}-observability-alerts"
+  kms_master_key_id = "alias/aws/sns"
 
   tags = merge(
     local.common_tags,
