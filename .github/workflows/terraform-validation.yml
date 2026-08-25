@@ -28,6 +28,8 @@ jobs:
           - modules/security/security-groups
           - stacks/networking/dev
           - stacks/security/dev
+          - stacks/compute/dev
+          - stacks/application/dev
 
     steps:
       - name: Checkout repository
