@@ -7,6 +7,8 @@
 # - S3 bucket for Terraform state DR
 # - S3 cross-region replication
 # - S3 bucket to collect access logs
+# - GitHub Actions OIDC identity provider
+# - IAM role assumed by GitHub Actions
 
 # Create customer-managed primary KMS key
 resource "aws_kms_key" "terraform_state" {
@@ -592,4 +594,49 @@ resource "aws_s3_bucket_lifecycle_configuration" "access_logs" {
     }
   }
 }
-# CI pipeline validation test
+
+# GitHub Actions OIDC identity provider
+resource "aws_iam_openid_connect_provider" "github_actions" {
+  url = "https://token.actions.githubusercontent.com"
+
+  client_id_list = [
+    "sts.amazonaws.com"
+  ]
+
+  tags = {
+    Name = "${var.company_name}-${var.environment}-github-actions-oidc"
+  }
+}
+
+# IAM role assumed by GitHub Actions for Terraform delivery
+resource "aws_iam_role" "github_actions_terraform" {
+  name = "${var.company_name}-${var.environment}-github-actions-terraform"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Sid    = "AllowGitHubActionsOIDC"
+        Effect = "Allow"
+
+        Principal = {
+          Federated = aws_iam_openid_connect_provider.github_actions.arn
+        }
+
+        Action = "sts:AssumeRoleWithWebIdentity"
+
+        Condition = {
+          StringEquals = {
+            "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+            "token.actions.githubusercontent.com:sub" = "repo:wumio/aws-enterprise-platform:environment:dev"
+          }
+        }
+      }
+    ]
+  })
+
+  tags = {
+    Name = "${var.company_name}-${var.environment}-github-actions-terraform"
+  }
+}
