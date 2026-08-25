@@ -640,3 +640,52 @@ resource "aws_iam_role" "github_actions_terraform" {
     Name = "${var.company_name}-${var.environment}-github-actions-terraform"
   }
 }
+
+# Least-privilege permissions for GitHub Actions Terraform state access
+resource "aws_iam_role_policy" "github_actions_terraform_state" {
+  name = "${var.company_name}-${var.environment}-github-actions-terraform-state"
+  role = aws_iam_role.github_actions_terraform.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Sid    = "TerraformStateBucket"
+        Effect = "Allow"
+
+        Action = [
+          "s3:ListBucket"
+        ]
+
+        Resource = aws_s3_bucket.terraform_state.arn
+      },
+      {
+        Sid    = "TerraformStateObjects"
+        Effect = "Allow"
+
+        Action = [
+          "s3:GetObject",
+          "s3:GetObjectVersion",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+
+        Resource = "${aws_s3_bucket.terraform_state.arn}/*"
+      },
+      {
+        Sid    = "TerraformStateKMS"
+        Effect = "Allow"
+
+        Action = [
+          "kms:Decrypt",
+          "kms:Encrypt",
+          "kms:GenerateDataKey",
+          "kms:DescribeKey"
+        ]
+
+        Resource = aws_kms_key.terraform_state.arn
+      }
+    ]
+  })
+}
