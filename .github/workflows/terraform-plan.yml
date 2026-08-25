@@ -51,7 +51,7 @@ jobs:
 
       - name: Terraform Init
         working-directory: ${{ matrix.directory }}
-        run: terraform init -backend=false
+        run: terraform init -backend-config=backend-config.hcl
 
       - name: Terraform Plan
         working-directory: ${{ matrix.directory }}
