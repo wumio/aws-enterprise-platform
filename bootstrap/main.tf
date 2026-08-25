@@ -629,7 +629,7 @@ resource "aws_iam_role" "github_actions_terraform" {
         Condition = {
           StringEquals = {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
-            "token.actions.githubusercontent.com:sub" = "repo:wumio/aws-enterprise-platform:environment:dev"
+            "token.actions.githubusercontent.com:sub" = "repo:wumio@4223679/aws-enterprise-platform@1315031193:environment:dev"
           }
         }
       }
