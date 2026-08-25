@@ -8,55 +8,55 @@ on:
       - "**/*.hcl"
       - ".github/workflows/terraform-plan.yml"
 
-    workflow_dispatch:
+  workflow_dispatch:
 
-  permissions:
-    contents: read
+permissions:
+  contents: read
 
-  jobs:
-    plan:
-      name: Terraform plan
-      runs-on: ubuntu-latest
+jobs:
+  plan:
+    name: Terraform plan
+    runs-on: ubuntu-latest
 
-      strategy:
-        fail-fast: false
-        matrix:
-          include:
-            - name: networking-dev
-              directory: stacks/networking/dev
-            - name: security-dev
-              directory: stacks/security/dev
-            - name: compute-dev
-              directory: stacks/compute/dev
-            - name: application-dev
-              directory: stacks/application/dev
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: networking-dev
+            directory: stacks/networking/dev
+          - name: security-dev
+            directory: stacks/security/dev
+          - name: compute-dev
+            directory: stacks/compute/dev
+          - name: application-dev
+            directory: stacks/application/dev
 
-        steps:
-          - name: Checkout repository
-            uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-          - name: Setup Terraform
-            uses: actions/checkout@v4
-            with:
-              terraform_version: "1.15.8"
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.15.8"
 
-          - name: Terraform Init
-            working-directory: ${{ matrix.directory }}
-            run: terraform init -backend=false
+      - name: Terraform Init
+        working-directory: ${{ matrix.directory }}
+        run: terraform init -backend=false
 
-          - name: Terraform Plan
-            working-directory: ${{ matrix.directory }}
-            run: terraform plan -out=tfplan
+      - name: Terraform Plan
+        working-directory: ${{ matrix.directory }}
+        run: terraform plan -out=tfplan
 
-          - name: Save plan
-            working-directory: ${{ matrix.directory }}
-            run: terraform show -no-color tfplan > tfplan.txt
+      - name: Save plan
+        working-directory: ${{ matrix.directory }}
+        run: terraform show -no-color tfplan > tfplan.txt
 
-          - name: Upload plan artifact
-            uses: actions/upload-artifact@v4
-            with:
-              name: terraform-plan-${{ matrix.name }}
-              path: |
-                ${{ matrix.directory }}/tfplan
-                ${{ matrix.directory }}/tfplan.txt
-              retention-days: 7
+      - name: Upload plan artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan-${{ matrix.name }}
+          path: |
+            ${{ matrix.directory }}/tfplan
+            ${{ matrix.directory }}/tfplan.txt
+          retention-days: 7
