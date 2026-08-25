@@ -47,7 +47,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ vars.TERRAFORM_ROLE_ARN }}
-          aws_region: ca-central-1
+          aws-region: ca-central-1
 
       - name: Terraform Init
         working-directory: ${{ matrix.directory }}
